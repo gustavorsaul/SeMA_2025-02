@@ -2,9 +2,9 @@ import java.util.*;
 
 public class SimulacaoFila3 {
     
-    // Evento simples
+    
     static class Evento {
-        double tempo; // tempo
+        double tempo; 
         int tipo; // 1=chegada, 2=saida
         
         Evento(double tempo, int tipo) {
@@ -13,25 +13,20 @@ public class SimulacaoFila3 {
         }
     }
     
-    // Lista simples de eventos
     private List<Evento> eventos = new ArrayList<>();
     
-    // Parâmetros
     private int capacidade;
     private int servidores;
-    private int clientes = 0; // clientes na fila
+    private int clientes = 0; 
     private int perdas = 0;
     
-    // Tempos
     private double tempo = 0;
-    private double[] tempos; // tempo em cada estado
+    private double[] tempos; 
     private double ultimo = 0;
     
-    // Intervalos
     private double chegadaMin, chegadaMax;
     private double saidaMin, saidaMax;
     
-    // Gerador simples
     private long seed = System.currentTimeMillis();
     
     public SimulacaoFila3(int capacidade, int servidores, 
@@ -49,7 +44,6 @@ public class SimulacaoFila3 {
         this.tempos = new double[capacidade + 1];
     }
     
-    // Gerador básico
     private double rand() {
         seed = (seed * 1103515245L + 12345L) & 0x7fffffffL;
         return (double)seed / 0x7fffffffL;
@@ -59,7 +53,6 @@ public class SimulacaoFila3 {
         return min + rand() * (max - min);
     }
     
-    // Adicionar evento ordenado
     private void addEvento(double tempo, int tipo) {
         Evento novo = new Evento(tempo, tipo);
         int i = 0;
@@ -69,19 +62,16 @@ public class SimulacaoFila3 {
         eventos.add(i, novo);
     }
     
-    // Próximo evento
     private Evento proximoEvento() {
         return eventos.isEmpty() ? null : eventos.remove(0);
     }
     
-    // Acumular tempo no estado atual
     private void acumula(double novoTempo) {
         tempos[clientes] += novoTempo - ultimo;
         ultimo = novoTempo;
         tempo = novoTempo;
     }
     
-    // Chegada
     private void chegada(Evento e) {
         acumula(e.tempo);
         
@@ -97,7 +87,6 @@ public class SimulacaoFila3 {
         addEvento(tempo + entre(chegadaMin, chegadaMax), 1);
     }
     
-    // Saída
     private void saida(Evento e) {
         acumula(e.tempo);
         clientes--;
@@ -124,7 +113,6 @@ public class SimulacaoFila3 {
             count--;
         }
         
-        // Mostrar resultados
         System.out.println("Tempo total: " + String.format("%.2f", tempo));
         System.out.println("Perdas: " + perdas);
         
